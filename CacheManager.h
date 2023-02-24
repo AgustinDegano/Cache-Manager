@@ -24,7 +24,7 @@ public:
   void insert(string key, T obj);
   T get(string key);
   void show_cache();
-  void showFile();
+  void showFile(string key);
   void write_file();
 };
 
@@ -66,7 +66,7 @@ void CacheManager <T>::write_file()
   }
   archivo.close();   
 }
-
+// -------------- SHOW CACHE ---------------- // 
 template <class T>
 void CacheManager <T >::show_cache()
 {
@@ -143,8 +143,7 @@ void CacheManager<T>::insert(string key, T obj)
   }
 }
 
-
-//-----------------GET-----------
+// -------------- GET ---------------- //
 template <class T>
 T CacheManager<T>::get(string key)
 {
@@ -162,26 +161,82 @@ T CacheManager<T>::get(string key)
     getline(archivo, texto);
     try
     {
-      
+      if (texto.rfind(key) < 1231233)
+      {
+        auto obj_file = cache_data_file.find(key);
+        auto x = cache_data.begin()->second.second;
+        int f = 0;
+
+        for (auto cada = cache_data.begin(); cd != cache_data.end(); cd++)
+        {
+          if (cada->second.second < x)
+          {
+            f = cada -> second.second;
+          }
+          else
+          {
+            f = x;
+          }
+        }
+
+        for (auto l = cache_data.begin(); l != cache_data.end(); l++)
+        {
+          if (l->second.second == x)
+          {
+            auto z = cache_data.find(l->first);
+            cache_data.erase(z);
+            MRU++;
+            cache_data.insert(make_pair(obj_file->first, make_pair(obj_file->second.first, MRU)));
+          }
+        } 
+        return obj_file->second.first;
+      }
+
+      auto item = cache_data.find(key);
+      if (item != cache_data.end())
+      {
+        item->second.second++;
+        return item->second.first;
+      }
     }
-    catch(const std::exception& e)
+    catch(...)
     {
-      std::cerr << e.what() << '\n';
-    }
-    
+     cout << "No se pudo encontrar la clave " << endl;
+    }    
+  }
+  archivo.close();
+}
+
+// -------------- MOSTRAR CACHE ---------------- //
+template <class T>
+void CacheManager<T>::show_cache()
+{
+  for (auto x : cache_data)
+  {
+    cout << x.first << " "
+         << "MRU: " << x.second.second << " " << x.second.first.getId() << " " << x.second.first.getData() << " " << x.second.first.getValue() << endl;
+  }
+}
+
+//--------------- MOSTRAR ARCHIVO --------------------//
+template <class T>
+void CacheManager<T>::showFile (string key)
+{
+  string texto;
+  ifstream archivo;
+  archivo.open("ArchivoMemoriaRam.txt", ios::in | ios::binary);
+
+  if(archivo.fail())
+  {
+    cout << "No se puede abrir o acceder al archivo";
+  }
+
+  cout << "ArchivoFinal" << endl;
+  
+  while (!archivo.eof())
+  {
+    getline(archivo, texto);
+    cout << texto << endl;
   }
   
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

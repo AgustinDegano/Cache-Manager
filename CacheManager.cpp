@@ -15,7 +15,23 @@ public:
       cout << " Student Object : " << id << " , " << value << " , " << data << endl;
    };
 
-   ~Student(){};
+   ~Student(){
+
+   };
+   
+  int getId()
+  {
+      return id;
+  }
+  int getValue()
+  {
+      return value;
+  }
+  string getData()
+  {
+      std::__cxx11::string s0 = &data[0];
+      return s0;
+  }   
 };
 
 const string Student ::class_name = " StudentClass ";
@@ -31,12 +47,12 @@ int main()
 
    my_cache.show_cache();
 
-   // cout << " ---------------------- UPDATE ----------------------- " << endl;
-   // my_cache.insert(" 2 ", Student(22, 222, " EZE "));
-   // my_cache.show_cache();
+   cout << " ---------------------- UPDATE ----------------------- " << endl;
+   my_cache.insert(" 2 ", Student(22, 222, " EZE "));
+   my_cache.show_cache();
 
-   // cout << "<<<<<< <<<<<<<<<<<< <<<<<<<<<<<< <<<<<<<<<<< <<<<<<<<<<<< <<<<" << endl;
-   // // Student return_obj = my_cache.get(" 0 "); // not in cache but in filesystem
+   cout << "<<<<<< <<<<<<<<<<<< <<<<<<<<<<<< <<<<<<<<<<< <<<<<<<<<<<< <<<<" << endl;
+   Student return_obj = my_cache.get(" 4 "); // not in cache but in filesystem
 
    // cout << "<<<<<< <<<<<<<<<<<< <<<<<<<<<<<< <<<<<<<<<<< <<<<<<<<<<<< <<<<" << endl;
 
