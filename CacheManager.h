@@ -53,28 +53,20 @@ void CacheManager <T>::write_file()
   if (archivo.fail())
   {
     cout << "No se puede abrir o acceder al archivo";
-    exit();  
+    exit(1);  
   }
-
   else
   {
-    (auto x : cache_data_file)      // Si puedo acceder al archivo, le pido que me pase el ID, Data y Valor.
     {
-      archivo << x.first << " "
+      for (auto x : cache_data_file)      // Si puedo acceder al archivo, le pido que me pase el ID, Data y Valor.
+      {
+        archivo << x.first << " "
               << " " << x.second.first.getId() << " " << x.second.first.getData() << " " << x.second.first.getValue() << endl;
+      }
     }
-  }
   archivo.close();   
-}
-// -------------- SHOW CACHE ---------------- // 
-template <class T>
-void CacheManager <T >::show_cache()
-{
-  for (auto x : cache_data) //Recorro el Caché
-  {
-    x.second.first.print(); //Muestro el Caché
   }
-}
+} 
 
 // -------------- INSERT ---------------- //
 template <class T>
@@ -102,12 +94,12 @@ void CacheManager<T>::insert(string key, T obj)
           cache_data.insert(make_pair(key,make_pair(obj,MRU)));
           auto t = cache_data_file.find(x->first);
           cache_data_file.erase(t);
-          cache_data_file.insert(make_pair(key, make_pair(obj,MRU)))
+          cache_data_file.insert(make_pair(key, make_pair(obj,MRU)));
         }
       }
       MRU++;
       cache_data.insert(make_pair(key, make_pair(obj,MRU)));
-      cache_data_file.insert(make_pair(key, make_pair(obj,MRU)))
+      cache_data_file.insert(make_pair(key, make_pair(obj,MRU)));
       write_file();
     }
     else
@@ -129,13 +121,14 @@ void CacheManager<T>::insert(string key, T obj)
 
       for (auto l = cache_data.begin(); l != cache_data.end(); l++)
       {
+        int f = 0;
         if (l->second.second == f)
         {
           auto y = cache_data.find(l->first);
           cache_data.erase(y);
-          mru++;
-          cache_data.insert(make_pair(key, make_pair(obj, mru)));
-          cache_data_file.insert(make_pair(key, make_pair(obj, mru)));
+          MRU++;
+          cache_data.insert(make_pair(key, make_pair(obj, MRU)));
+          cache_data_file.insert(make_pair(key, make_pair(obj, MRU)));
           writeFile();
         }
       }
@@ -148,15 +141,15 @@ template <class T>
 T CacheManager<T>::get(string key)
 {
   string texto;
-  ifstring archivo;
-  archivo.open("ArchivoMemoriaRam.txt", ios::in | ios:binary);
+  ifstream archivo;
+  archivo.open("ArchivoMemoriaRam.txt", ios::in | ios::binary);
 
   if(archivo.fail())
   {
     cout << "No se puede abrir o acceder al archivo";
   }  
 
-  while (!archivo.oef())
+  while (!archivo.eof())
   {
     getline(archivo, texto);
     try
@@ -167,7 +160,7 @@ T CacheManager<T>::get(string key)
         auto x = cache_data.begin()->second.second;
         int f = 0;
 
-        for (auto cada = cache_data.begin(); cd != cache_data.end(); cd++)
+        for (auto cada = cache_data.begin(); cada != cache_data.end(); cada++)
         {
           if (cada->second.second < x)
           {
