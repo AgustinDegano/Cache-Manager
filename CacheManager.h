@@ -129,7 +129,7 @@ void CacheManager<T>::insert(string key, T obj)
           MRU++;
           cache_data.insert(make_pair(key, make_pair(obj, MRU)));
           cache_data_file.insert(make_pair(key, make_pair(obj, MRU)));
-          writeFile();
+          write_file();
         }
       }
     }
